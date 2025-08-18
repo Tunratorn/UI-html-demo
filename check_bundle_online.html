@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Bundle</title>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fastly.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://fastly.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://fastly.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.5/xlsx.full.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11"></script>      
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment-with-locales.min.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+</head>
+
+<style>
+    @font-face {
+        font-family: 'DBHeaventRounded';
+        font-style: normal;
+        font-weight:normal;
+        src: url('https://img.advice.co.th//images_nas/advice/oneweb/assets/fonts/DBHeaventRoundedBd/DBHeaventRoundedv3.2.ttf')  format('truetype');
+
+    }
+
+    :root {
+        --main-color: #0D95DA !important;
+        --main-header: #0D95DA !important;
+    }
+
+    #app {
+        font-family: 'DBHeaventRounded';
+        background: #f5f5f5;
+    }
+
+    .loading-page {
+        background: #00000029;
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bgmain-color {
+        background: var(--main-header) !important;
+    }
+
+    .border {
+        border-color: var(--main-color) !important;
+    }
+
+    .text-red {
+        font-size: 16px;
+        color: red;
+    }
+
+    .font-14 {
+        font-size: 14px !important;
+    }
+    .font-16 {
+        font-size: 16px !important;
+    }
+    .font-18 {
+        font-size: 18px !important;
+    }    
+    .font-19 {
+        font-size: 19px !important;
+    }    
+    .font-20 {
+        font-size: 20px !important;
+    }
+
+    .btn-report-store {
+        background: #4678b2 !important;
+        color: #fff !important;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 18px;
+        border: none;
+        height: 38px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: max-content;
+        gap: 8px;
+    }
+
+    .btn-search {
+        background: #4678b2 !important;
+        color: #fff !important;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 18px;
+        border: none;
+        height: 38px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+    }
+        
+    .form-select {
+        display: flex;
+        align-items: center;
+        gap: 10px
+    }
+
+    .menuable__content__active {
+        top: 182px !important;
+    }
+
+    .group-content-main {
+        display: grid;
+        grid-template-columns: 300px calc(100% - 300px);
+    }
+
+    .form-product-main, .form-bundle {
+        border-radius: 8px;
+    }
+
+    .v-text-field--outlined fieldset {
+        border: 1px solid #ced4da !important;
+    }
+
+    .form-box-set, .form-box-set-td {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        padding: 5px;
+        font-size: 18px;
+        width: 140px;
+    }
+
+    .form-box-set-td {
+        padding: 1px;
+        font-size: 17px;
+    }
+
+    .Purple {
+        background: #f7e4ff;
+        color: #a56abe;
+    }
+
+    .Blue {
+        background: #d4edfbff;
+        color: #0a95da;
+    }
+
+    .Green {
+        background: #d7ffec;
+        color: #12b76a;
+    }
+
+    .text-type-product {
+        border-radius: 20px;
+        background: #eaf6ffff;
+        padding: 1px 12px;
+        color: #0a95da;
+        border-radius: 20px;
+        width: 90px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .text-type-product.active {
+        background: #ffffffff;
+        color: #0a95da;
+    }
+
+    .list-product-main {
+        border: 1px solid #ecececff;
+        border-radius: 8px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .list-product-main:hover {
+        border: 1px solid #0a95da;
+    }
+    .list-product-main.active {
+        border: none;
+        background: #eaf6ffff;
+    }
+
+    .text-product-name {
+        width: 92%;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 18px;
+        height: 36px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .bg-th {
+        background: var(--main-color) !important;
+        font-size: 17px !important;
+        height: 32px !important;
+    }
+
+    .border-tbl {
+        border: 1px solid #ddd;
+        font-size: 16px !important;
+    } 
+
+    th {
+        padding: 0;
+    }
+
+    .rounded-table {
+        border-radius: 8px;
+        overflow: hidden; /* เพื่อให้เนื้อหาข้างในโค้งตาม */
+    }
+
+    .v-data-table>.v-data-table__wrapper>table>tbody>tr>td, .v-data-table>.v-data-table__wrapper>table>tfoot>tr>td, .v-data-table>.v-data-table__wrapper>table>thead>tr>td {
+        font-size: .875rem;
+        height: 40px;
+    }
+
+    .bg-gray {
+        background: #f2f2f2 !important;
+    }
+</style>
+<body>
+    <div id="app">
+        <v-app>
+            <v-main>
+                <div class="loading-page">
+                    <div style="display: grid;justify-content: center;text-align: center;">
+                        <v-progress-circular
+                        color="primary"
+                        indeterminate
+                        :size="80"
+                        :width="7"
+                        ></v-progress-circular>
+                        <span style='margin-top: 20px;'>Loading...</span>
+                    </div>
+                </div>
+                <div class="container-fluid pt-3">
+                    <template>
+                        <v-card outlined>
+                            <v-card-title class="white--text justify-content-center py-3 bgmain-color">
+                                <!-- <div style="position: absolute;left: 20px;cursor: pointer;">
+                                    <span class="d-flex align-items-center" onclick="location.href='<?=base_url() ?>';">
+                                        <svg style="margin-right: 8px;height: 12px;" width="10" height="15" viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M-3.62396e-05 7.49999C-3.62396e-05 6.89428 0.314012 6.28856 0.930475 5.82995L8.51409 0.188203C8.8514 -0.0627345 9.40971 -0.0627345 9.74702 0.188203C10.0843 0.439141 10.0843 0.854487 9.74702 1.10542L2.1634 6.74717C1.60509 7.16252 1.60509 7.83746 2.1634 8.2528L9.74702 13.8946C10.0843 14.1455 10.0843 14.5609 9.74702 14.8118C9.40971 15.0627 8.8514 15.0627 8.51409 14.8118L0.930475 9.17002C0.314012 8.71141 -3.62396e-05 8.1057 -3.62396e-05 7.49999Z" fill="white"/>
+                                        </svg>
+                                    HOME</span>
+                                </div> -->
+                                <span style="font-size: 25px;">โปรแกรมเช็ค Bundle Online</span>
+                            </v-card-title>
+                            <v-card-text class="p-3" style="background: #f5f5f5;">
+                                <div class="wrapper-box bg-white p-4" style="border-radius: 8px;">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <img class="me-2" width="22" src="https://img.advice.co.th/images_nas/work/iconsearch.png" alt="iconseacrh">
+                                        <span class="font-20">ค้นหา Bundle สินค้า Online:</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-group form-select mb-0">
+                                            <label for="typeproduct-select" class="font-18 mb-0">หมวดสินค้า :</label>
+                                            <v-select
+                                                id="typeproduct-select"
+                                                v-model="selected_typeproduct"
+                                                :items="data_typeproduct"
+                                                item-text="ITEMTYPENAME"
+                                                item-value="ITEMTYPECODE"
+                                                class="p-0 m-0 me-4"
+                                                placeholder="กรุณาเลือกหมวดสินค้า"
+                                                dense
+                                                outlined
+                                                multiple
+                                                hide-details
+                                                style="width: 200px;"
+                                            >
+                                                <template v-slot:prepend-item>
+                                                    <v-list-item>
+                                                        <v-list-item-content>
+                                                            <v-text-field v-model="find_typeproduct" placeholder="Search" @input="search_typeproduct"></v-text-field>
+                                                        </v-list-item-content>
+                                                    </v-list-item>
+                                                    <v-list-item @click="toggleSelectAllTypeproduct()" style="cursor:pointer;">
+                                                        <v-list-item-action>
+                                                            <v-checkbox
+                                                                v-model="isAllTypeproductSelected"
+                                                                :input-value="isAllTypeproductSelected"
+                                                                color="primary"
+                                                            ></v-checkbox>
+                                                        </v-list-item-action>
+                                                        <v-list-item-content>
+                                                            <v-list-item-title>เลือกทั้งหมด</v-list-item-title>
+                                                        </v-list-item-content>
+                                                    </v-list-item>
+                                                    <v-divider class="mt-2"></v-divider>
+                                                </template>
+                                                <template v-slot:selection="{ index }">
+                                                    <span v-if="index === 0">หมวดสินค้า ({{ selected_typeproduct.length }})</span>
+                                                </template>
+                                            </v-select>
+                                        </div>
+                                        <div class="form-group mb-0 form-select me-4">
+                                            <label for="search_code" class="font-18 mb-0" style="white-space: nowrap;">รหัสสินค้า :</label>
+                                            <input type="text" class="form-control form-control-sm font-16" id="search_code" placeholder="กรุณาระบุรหัสสินค้า" v-model="search_code" style="height: 40px;width: 250px;">
+                                        </div>
+                                        <button @click="getData" class="btn btn-sm btn-search">ค้นหา</button>
+                                        <div class="mx-4" style="width: 1px; height: 32px; background-color: rgb(204, 204, 204);"></div>
+                                        <button @click="exportAllProductMainAndItemBundle" class="btn btn-sm btn-report-store">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 25" fill="none">
+                                            <path d="M12 1.25C8.5905 1.25 6.2625 1.4275 4.823 1.5955C3.379 1.764 2.278 2.8585 2.113 4.308C1.938 5.8465 1.75 8.4455 1.75 12.5C1.75 16.5545 1.9385 19.1535 2.113 20.692C2.278 22.1415 3.379 23.236 4.823 23.4045C6.263 23.5725 8.5905 23.75 12 23.75C15.4095 23.75 17.7375 23.5725 19.177 23.4045C20.621 23.236 21.722 22.1415 21.887 20.692C22.0615 19.1535 22.25 16.555 22.25 12.5C22.25 10.9815 22.2235 9.667 22.1815 8.5365C22.1786 8.45918 22.1638 8.38278 22.1375 8.31C21.908 7.6745 21.2075 6.223 19.176 4.2425C17.0205 2.1405 15.48 1.5025 14.907 1.324C14.8423 1.30388 14.7752 1.29261 14.7075 1.2905C13.8935 1.2655 12.9925 1.25 12 1.25Z" fill="white"/>
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.625 19.5C5.625 19.9835 6.017 20.375 6.5 20.375H17.5C17.7321 20.375 17.9546 20.2828 18.1187 20.1187C18.2828 19.9546 18.375 19.7321 18.375 19.5C18.375 19.2679 18.2828 19.0454 18.1187 18.8813C17.9546 18.7172 17.7321 18.625 17.5 18.625H6.5C6.26794 18.625 6.04538 18.7172 5.88128 18.8813C5.71719 19.0454 5.625 19.2679 5.625 19.5ZM5.625 16C5.625 15.517 6.017 15.125 6.5 15.125H17.5C17.7321 15.125 17.9546 15.2172 18.1187 15.3813C18.2828 15.5454 18.375 15.7679 18.375 16C18.375 16.2321 18.2828 16.4546 18.1187 16.6187C17.9546 16.7828 17.7321 16.875 17.5 16.875H6.5C6.26794 16.875 6.04538 16.7828 5.88128 16.6187C5.71719 16.4546 5.625 16.2321 5.625 16Z" fill="#337AB7"/>
+                                            <path d="M16.5823 5.88126C15.6241 5.8519 14.6656 5.92583 13.7233 6.10176C12.8103 6.27476 12.5718 7.36476 13.1673 7.96026L13.7293 8.52276L13.6958 8.55226C13.5458 8.68376 13.3363 8.87276 13.0933 9.10576C12.6201 9.55618 12.1711 10.0313 11.7483 10.5293C11.5393 9.88926 11.2768 9.16676 10.9928 8.59076C10.6393 7.87476 9.74426 7.53476 8.98976 7.99776C8.27226 8.43876 7.11176 9.40076 5.76776 11.4548C5.64072 11.649 5.59603 11.8857 5.64352 12.1128C5.69102 12.34 5.8268 12.539 6.02101 12.666C6.21521 12.7931 6.45193 12.8377 6.67908 12.7902C6.90623 12.7428 7.10522 12.607 7.23226 12.4128C8.22276 10.8988 9.05526 10.1088 9.58226 9.71126C9.82476 10.2748 10.0573 10.9663 10.2398 11.5633C10.4238 12.1648 10.9398 12.4778 11.4048 12.5498C11.8673 12.6213 12.4343 12.4833 12.8013 12.0098C13.2888 11.3818 13.8533 10.7998 14.3023 10.3703C14.5197 10.1624 14.7422 9.95999 14.9698 9.76326L15.5398 10.3328C16.1348 10.9278 17.2248 10.6893 17.3978 9.77626C17.6293 8.55476 17.6378 7.48626 17.6183 6.91726C17.6097 6.6452 17.4979 6.38661 17.3054 6.19414C17.1129 6.00166 16.8543 5.88978 16.5823 5.88126Z" fill="#337AB7"/>
+                                            </svg>    
+                                            Export All</button>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="group-content-main">
+                                        <div class="form-product-main bg-white me-2 p-4">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <img class="me-2" width="24" src="https://img.advice.co.th/images_nas/work/revserdbox.png" alt="icon">
+                                                <span class="font-20">สินค้าหลัก:</span>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm font-16" placeholder="กรุณาระบุรหัสสินค้า" v-model="search_productmain" style="height: 40px;width: 100%;">
+                                            <div v-if="product_main.length == 0" class="mt-3 d-flex align-items-center justify-content-center" style="height: 600px;border: 1px dashed #ced4da;border-radius: 8px;">
+                                                <div class="d-flex align-items-center justify-content-center flex-column">
+                                                    <img class='mb-2' width="45" src="https://img.advice.co.th/images_nas/work/iconshowsearchGroup.png" alt="icon">
+                                                    <span class="font-18 text-center" style="color: #6374ab;">กรุณาทำการค้นหาก่อน<br>เพื่อแสดงรายการสินค้าหลัก</span>
+                                                </div>
+                                            </div>
+                                            <div v-else class="mt-3" style="height: 600px;overflow-y: auto;">
+                                                <div v-for="product in product_main" class="list-product-main mb-2" :class="{ active: product.active }" @click="selectProductMain(product)">
+                                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                                        <div class="d-flex align-items-center font-18" style="color: #0D95DA;font-weight: 500;">
+                                                            <img class="me-2" width="22" src="https://img.advice.co.th/images_nas/work/basil_folder-open-solid.png" alt="icon">
+                                                            {{product.CODE}}
+                                                        </div>
+                                                        <span class="font-18 text-type-product" :title="product.ITEMTYPENAME" :class="{ active: product.active }">{{ product.ITEMTYPENAME }}</span>
+                                                    </div>
+                                                    <span
+                                                        class="font-16 text-product-name"
+                                                        style="line-height: 18px;"
+                                                        :title="product.SHORTNAME.length > 60 ? product.SHORTNAME : ''"
+                                                    >
+                                                        {{ product.SHORTNAME }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-bundle bg-white p-4">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <img class="me-2" width="22" src="https://img.advice.co.th/images_nas/work/boxrebun.png" alt="icon">
+                                                <span class="font-20">สินค้าของแถม:</span>
+                                                <span class="font-20 ms-2" style="color: #0D95DA;">{{ name_product_main }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <input type="text" class="form-control form-control-sm font-16 me-3" placeholder="กรุณาระบุรหัสสินค้า" v-model="search_bundle" style="height: 40px;width: 400px;">
+                                                    <button @click="exportItemBundle" class="btn btn-sm btn-report-store" style="width: 106px;">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 25" fill="none">
+                                                        <path d="M12 1.25C8.5905 1.25 6.2625 1.4275 4.823 1.5955C3.379 1.764 2.278 2.8585 2.113 4.308C1.938 5.8465 1.75 8.4455 1.75 12.5C1.75 16.5545 1.9385 19.1535 2.113 20.692C2.278 22.1415 3.379 23.236 4.823 23.4045C6.263 23.5725 8.5905 23.75 12 23.75C15.4095 23.75 17.7375 23.5725 19.177 23.4045C20.621 23.236 21.722 22.1415 21.887 20.692C22.0615 19.1535 22.25 16.555 22.25 12.5C22.25 10.9815 22.2235 9.667 22.1815 8.5365C22.1786 8.45918 22.1638 8.38278 22.1375 8.31C21.908 7.6745 21.2075 6.223 19.176 4.2425C17.0205 2.1405 15.48 1.5025 14.907 1.324C14.8423 1.30388 14.7752 1.29261 14.7075 1.2905C13.8935 1.2655 12.9925 1.25 12 1.25Z" fill="white"/>
+                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.625 19.5C5.625 19.9835 6.017 20.375 6.5 20.375H17.5C17.7321 20.375 17.9546 20.2828 18.1187 20.1187C18.2828 19.9546 18.375 19.7321 18.375 19.5C18.375 19.2679 18.2828 19.0454 18.1187 18.8813C17.9546 18.7172 17.7321 18.625 17.5 18.625H6.5C6.26794 18.625 6.04538 18.7172 5.88128 18.8813C5.71719 19.0454 5.625 19.2679 5.625 19.5ZM5.625 16C5.625 15.517 6.017 15.125 6.5 15.125H17.5C17.7321 15.125 17.9546 15.2172 18.1187 15.3813C18.2828 15.5454 18.375 15.7679 18.375 16C18.375 16.2321 18.2828 16.4546 18.1187 16.6187C17.9546 16.7828 17.7321 16.875 17.5 16.875H6.5C6.26794 16.875 6.04538 16.7828 5.88128 16.6187C5.71719 16.4546 5.625 16.2321 5.625 16Z" fill="#337AB7"/>
+                                                        <path d="M16.5823 5.88126C15.6241 5.8519 14.6656 5.92583 13.7233 6.10176C12.8103 6.27476 12.5718 7.36476 13.1673 7.96026L13.7293 8.52276L13.6958 8.55226C13.5458 8.68376 13.3363 8.87276 13.0933 9.10576C12.6201 9.55618 12.1711 10.0313 11.7483 10.5293C11.5393 9.88926 11.2768 9.16676 10.9928 8.59076C10.6393 7.87476 9.74426 7.53476 8.98976 7.99776C8.27226 8.43876 7.11176 9.40076 5.76776 11.4548C5.64072 11.649 5.59603 11.8857 5.64352 12.1128C5.69102 12.34 5.8268 12.539 6.02101 12.666C6.21521 12.7931 6.45193 12.8377 6.67908 12.7902C6.90623 12.7428 7.10522 12.607 7.23226 12.4128C8.22276 10.8988 9.05526 10.1088 9.58226 9.71126C9.82476 10.2748 10.0573 10.9663 10.2398 11.5633C10.4238 12.1648 10.9398 12.4778 11.4048 12.5498C11.8673 12.6213 12.4343 12.4833 12.8013 12.0098C13.2888 11.3818 13.8533 10.7998 14.3023 10.3703C14.5197 10.1624 14.7422 9.95999 14.9698 9.76326L15.5398 10.3328C16.1348 10.9278 17.2248 10.6893 17.3978 9.77626C17.6293 8.55476 17.6378 7.48626 17.6183 6.91726C17.6097 6.6452 17.4979 6.38661 17.3054 6.19414C17.1129 6.00166 16.8543 5.88978 16.5823 5.88126Z" fill="#337AB7"/>
+                                                        </svg>    
+                                                        Export</button>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="text" class="form-control form-control-sm font-16 me-3" :value="qty_bundle" style="height: 25px;width: 45px;" disabled>
+                                                    <span class="font-16">ของแถมหมดอายุ</span>
+                                                </div>
+                                            </div>
+                                            <div v-if="itemBundle.length == 0" class="mt-1 d-flex align-items-center justify-content-center" style="height: 600px;border: 1px dashed #ced4da;border-radius: 8px;">
+                                                <div class="d-flex align-items-center justify-content-center flex-column">
+                                                    <img class='mb-2' width="45" src="https://img.advice.co.th/images_nas/work/iconboxpreview.png" alt="icon">
+                                                    <span class="font-20 text-center" style="color: #6374ab;">รายการของแถม</span>
+                                                    <span class="font-18 text-center mt-3" style="color: #6374ab;">เลือกรายการสินค้าหลักจากบริเวณด้านซ้ายเพื่อแสดงรายการของแถม</span>
+                                                    <div class="d-flex flex-wrap justify-content-center mt-2" style="gap: 10px;">
+                                                        <div class="form-box-set Purple">
+                                                            <img class='me-2' width="20" src="https://img.advice.co.th/images_nas/work/iconmong.png" alt="icon">
+                                                            ของแถม Box
+                                                        </div>
+                                                        <div class="form-box-set Blue">
+                                                            <img class='me-2' width="20" src="https://img.advice.co.th/images_nas/work/boxcolorblue.png" alt="icon">
+                                                            ของแถม Online
+                                                        </div>
+                                                        <div class="form-box-set Green">
+                                                            <img class='me-2' width="20" src="https://img.advice.co.th/images_nas/work/boxgreen.png" alt="icon">
+                                                            ของแถม Main
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <v-data-table v-else 
+                                                class="rounded-table"
+                                                height="600px"
+                                                :headers="headerBundle"
+                                                :items="itemBundle"
+                                                :search="search_bundle"
+                                                hide-default-footer disable-pagination fixed-header
+                                            >
+                                                <template v-slot:item="{ item, index }">
+                                                    <tr :class="{'bg-gray': item.expiry}" :key="index">
+                                                        <td class="border-tbl py-1">
+                                                            <div class="d-flex align-items-center justify-content-center">
+                                                                <div v-if="item.type == 'Box'" class="form-box-set-td Purple">
+                                                                    <img class='me-2' width="15" src="https://img.advice.co.th/images_nas/work/iconmong.png" alt="icon">
+                                                                    ของแถม Box
+                                                                </div>
+                                                                <div v-if="item.type == 'Online'" class="form-box-set-td Blue">
+                                                                    <img class='me-2' width="15" src="https://img.advice.co.th/images_nas/work/boxcolorblue.png" alt="icon">
+                                                                    ของแถม Online
+                                                                </div>
+                                                                <div v-if="item.type == 'Main'" class="form-box-set-td Green">
+                                                                    <img class='me-2' width="15" src="https://img.advice.co.th/images_nas/work/boxgreen.png" alt="icon">
+                                                                    ของแถม Main
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="border-tbl text-center">{{ item.start_date ? format_date(item.start_date) : '-' }}</td>
+                                                        <td class="border-tbl text-center">{{ item.end_date ? format_date(item.end_date) : '-' }}</td>
+                                                        <td class="border-tbl text-center">{{ item.code ? item.code : '-' }}</td>
+                                                        <td class="border-tbl">{{ item.name_product ? item.name_product : '-' }}</td>
+                                                        <td class="border-tbl text-center">{{ item.remain !== '' ? item.remain : '-' }}</td>
+                                                        <td class="border-tbl text-center">{{ item.instock !== '' ? item.instock : '-' }}</td>
+                                                        <td class="border-tbl text-center">{{ item.book !== '' ? item.book : '-' }}</td>
+                                                        <td class="border-tbl text-center">{{ item.netstock !== '' ? item.netstock : '-' }}</td>
+                                                    </tr>
+                                                </template>
+                                            </v-data-table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </template>
+                </div>
+            </v-main>
+        </v-app>
+    </div>
+</body>
+</html>
+
+<script>
+var app = new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: () => {
+        return {     
+            headerBundle: [
+                { text: 'ประเภท', value: 'type', align: 'center', class: 'text-light bg-th', sortable: false, width: '150px' },
+                { text: 'วันที่เริ่มต้น', value: 'start_date', align: 'center', class: 'text-light bg-th', width: '120px' },
+                { text: 'วันที่สิ้นสุด', value: 'end_date', align: 'center', class: 'text-light bg-th', width: '120px' },
+                { text: 'Code A', value: 'code', align: 'center', class: 'text-light bg-th', width: '110px' },
+                { text: 'ชื่อสินค้า', value: 'name_product', align: 'center', class: 'text-light bg-th', width: '260px' },
+                { text: 'Remain', value: 'remain', align: 'center', class: 'text-light bg-th', width: '90px' },
+                { text: 'InStock', value: 'instock', align: 'center', class: 'text-light bg-th', width: '90px' },
+                { text: 'Book', value: 'book', align: 'center', class: 'text-light bg-th', width: '90px' },
+                { text: 'NetStock', value: 'netstock', align: 'center', class: 'text-light bg-th', width: '90px' }
+            ],
+            itemBundle: [],
+            selected_typeproduct: [],
+            data_typeproduct: [
+                { ITEMTYPECODE: 'A', ITEMTYPENAME: 'คอมพิวเตอร์' },
+                { ITEMTYPECODE: 'B', ITEMTYPENAME: 'โน๊ตบุ๊ค' },
+                { ITEMTYPECODE: 'C', ITEMTYPENAME: 'อุปกรณ์เสริม' }
+            ],
+            data_typeproduct_copy: [
+                { ITEMTYPECODE: 'A', ITEMTYPENAME: 'คอมพิวเตอร์' },
+                { ITEMTYPECODE: 'B', ITEMTYPENAME: 'โน๊ตบุ๊ค' },
+                { ITEMTYPECODE: 'C', ITEMTYPENAME: 'อุปกรณ์เสริม' }
+            ],
+            find_typeproduct: '',
+            search_code: '',
+            search_productmain: '',
+            search_bundle: '',
+            qty_bundle: '',
+            product_main: [],
+            product_main_copy: [],
+            product_bunle: [],
+            name_product_main: '',
+        }
+    },
+    methods: {
+        async getData() {
+            this.product_main = [];
+            this.product_main_copy = [];
+            this.product_bunle = [];
+            this.itemBundle = [];
+            $(".loading-page").show()
+            // Example: set obj from static data (replace with AJAX in production)
+            let obj = {
+                "status": "success",
+                "data_main": [
+                    { CODE: "51000010", SHORTNAME: "สินค้า 1", ITEMTYPENAME: "คอมพิวเตอร์" },
+                    { CODE: "51000011", SHORTNAME: "สินค้า 2", ITEMTYPENAME: "โน๊ตบุ๊ค" },
+                    { CODE: "51000012", SHORTNAME: "สินค้า 3", ITEMTYPENAME: "อุปกรณ์เสริม" }
+                ],
+                "data_bundle": {
+                    "51000010": [],
+                    "51000011": [],
+                    "51000012": [
+                        {
+                            type: "BRANCH",
+                            branch_from: "51000000",
+                            branch_to: "51000012",
+                            aging: "9",
+                            inv_no: "RN68080298",
+                            inv_date: "",
+                            ordernum: "SO71896271",
+                            orderdate: "2025-08-09",
+                            sn: "2801213362",
+                            CODE: "A0162673",
+                            SHORTNAME: "S/P APPLE iPhone 16 Pro Max 256GB (MYWW3ZP/A) White Titanium",
+                            qty: 1,
+                            unit: "38865.00",
+                            tracking_no: "",
+                            request_no: "RP2500019011",
+                            box_no: "TS60461360",
+                            branch_send_date: "2025-08-09 16:07:00",
+                            branch_stock_date: "2025-08-09 11:17:48",
+                            insert_date: "2025-08-09 11:58:29",
+                            status: "รอดำเนินการ"
+                        },
+                        {
+                            type: "BRANCH",
+                            branch_from: "51000000",
+                            branch_to: "51000012",
+                            aging: "9",
+                            inv_no: "RN68080298",
+                            inv_date: "",
+                            ordernum: "SO71896271",
+                            orderdate: "2025-08-09",
+                            sn: "2801213362",
+                            CODE: "A0162674",
+                            SHORTNAME: "S/P APPLE iPhone 16 Pro Max 256GB (MYWW3ZP/A) White Titanium",
+                            qty: 1,
+                            unit: "38865.00",
+                            tracking_no: "",
+                            request_no: "RP2500019011",
+                            box_no: "TS60461360",
+                            branch_send_date: "2025-08-09 16:07:00",
+                            branch_stock_date: "2025-08-09 11:17:48",
+                            insert_date: "2025-08-09 11:58:29",
+                            status: "รอดำเนินการ"
+                        },
+                    ]
+                }
+            };
+            
+            setTimeout(() => {
+                if (obj.status == 'success') {
+                    for (const key in obj.data_main) {
+                        obj.data_main[key].active = false;
+                        this.product_main.push(obj.data_main[key]);
+                        this.product_main_copy.push(obj.data_main[key]);
+                    }
+                    this.product_bunle = obj.data_bundle;
+                }
+                $(".loading-page").hide();
+            }, 500);
+        },
+        selectProductMain(product) {
+            this.product_main.forEach(p => p.active = false);
+            product.active = true;
+            this.name_product_main = product.CODE+" "+product.SHORTNAME;
+            
+            console.log(product.CODE);
+            $(".loading-page").show();
+            this.itemBundle = [];
+            setTimeout(() => {
+                // bundle Box
+                // DEMO: Add sample bundle data for demo purpose
+                this.itemBundle = [
+                    {
+                        type: 'Box',
+                        start_date: '',
+                        end_date: '',
+                        code: 'A001',
+                        name_product: 'ของแถม Box Demo',
+                        remain: '',
+                        instock: 10,
+                        book: 2,
+                        netstock: 8,
+                        expiry: false
+                    },
+                    {
+                        type: 'Online',
+                        start_date: '2024-06-01',
+                        end_date: '2024-07-01',
+                        code: 'A002',
+                        name_product: 'ของแถม Online Demo',
+                        remain: 5,
+                        instock: 5,
+                        book: 0,
+                        netstock: 5,
+                        expiry: false
+                    },
+                    {
+                        type: 'Online',
+                        start_date: '2023-01-01',
+                        end_date: '2023-02-01',
+                        code: 'A003',
+                        name_product: 'ของแถม Online หมดอายุ',
+                        remain: 0,
+                        instock: 0,
+                        book: 0,
+                        netstock: 0,
+                        expiry: true
+                    },
+                    {
+                        type: 'Main',
+                        start_date: '2024-05-01',
+                        end_date: '2024-12-31',
+                        code: 'A004',
+                        name_product: 'ของแถม Main Demo',
+                        remain: 3,
+                        instock: 3,
+                        book: 0,
+                        netstock: 3,
+                        expiry: false
+                    }
+                ];
+                $(".loading-page").hide();
+            }, 500);
+        },
+        exportItemBundle() {
+            if (!this.itemBundle.length) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'แจ้งเตือน',
+                    text: 'ไม่มีข้อมูลสำหรับ Export',
+                    confirmButtonText: 'ปิด',
+                    confirmButtonColor: "#d33",
+                    customClass: {
+                        confirmButton: 'swal2-confirm text-white',
+                    }
+                });
+                return;
+            }
+            const headers = [
+                'ประเภท', 'วันที่เริ่มต้น', 'วันที่สิ้นสุด', 'Code A', 'ชื่อสินค้า', 'Remain', 'InStock', 'Book', 'NetStock'
+            ];
+            const data = this.itemBundle.map(item => [
+                item.type,
+                this.format_date(item.start_date),
+                this.format_date(item.end_date),
+                item.code,
+                item.name_product,
+                item.remain,
+                item.instock,
+                item.book,
+                item.netstock
+            ]);
+            const ws_data = [headers, ...data];
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Bundle");
+            XLSX.writeFile(wb, "bundle_export.xlsx");
+        },
+        exportAllProductMainAndItemBundle() {
+            if (!this.product_main_copy.length) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'แจ้งเตือน',
+                    text: 'ไม่มีข้อมูลสำหรับ Export',
+                    confirmButtonText: 'ปิด',
+                    confirmButtonColor: "#d33",
+                    customClass: {
+                        confirmButton: 'swal2-confirm text-white',
+                    }
+                });
+                return;
+            }
+            const headers = [
+                'รหัสสินค้าหลัก', 'ชื่อสินค้าหลัก', 'หมวดสินค้า',
+                'ประเภทของแถม', 'วันที่เริ่มต้น', 'วันที่สิ้นสุด', 'Code A', 'ชื่อของแถม', 'Remain', 'InStock', 'Book', 'NetStock'
+            ];
+            let ws_data = [headers];
+
+            this.product_main_copy.forEach(main => {
+                let bundles = [];
+                if (this.product_bunle[main.CODE]) {
+                    // Box
+                    if (this.product_bunle[main.CODE]['branch_bandle']) {
+                        this.product_bunle[main.CODE]['branch_bandle'].forEach(item => {
+                            bundles.push({
+                                type: 'Box',
+                                start_date: '',
+                                end_date: '',
+                                code: item.CODE,
+                                name_product: item.SHORTNAME,
+                                remain: '',
+                                instock: '',
+                                book: '',
+                                netstock: ''
+                            });
+                        });
+                    }
+                    // Online
+                    if (this.product_bunle[main.CODE]['bundle_online']) {
+                        this.product_bunle[main.CODE]['bundle_online'].forEach(item => {
+                            bundles.push({
+                                type: 'Online',
+                                start_date: item.start_date,
+                                end_date: item.expire_date,
+                                code: item.CODE,
+                                name_product: item.SHORTNAME,
+                                remain: item.remain,
+                                instock: '',
+                                book: '',
+                                netstock: ''
+                            });
+                        });
+                    }
+                    // Main
+                    if (this.product_bunle[main.CODE]['bundle_box']) {
+                        this.product_bunle[main.CODE]['bundle_box'].forEach(item => {
+                            bundles.push({
+                                type: 'Main',
+                                start_date: item.start_date,
+                                end_date: item.expire_date,
+                                code: item.CODE,
+                                name_product: item.SHORTNAME,
+                                remain: item.remain,
+                                instock: '',
+                                book: '',
+                                netstock: ''
+                            });
+                        });
+                    }
+                }
+                if (bundles.length === 0) {
+                    ws_data.push([
+                        main.CODE,
+                        main.SHORTNAME,
+                        main.ITEMTYPENAME,
+                        '', '', '', '', '', '', '', '', ''
+                    ]);
+                } else {
+                    bundles.forEach(b => {
+                        ws_data.push([
+                            main.CODE,
+                            main.SHORTNAME,
+                            main.ITEMTYPENAME,
+                            b.type,
+                            this.format_date(b.start_date),
+                            this.format_date(b.end_date),
+                            b.code,
+                            b.name_product,
+                            b.remain,
+                            b.instock,
+                            b.book,
+                            b.netstock
+                        ]);
+                    });
+                }
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "AllBundle");
+            XLSX.writeFile(wb, "all_bundle_export.xlsx");
+        },
+        format_date(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return '';
+            const day = ('0' + date.getDate()).slice(-2);
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        },
+        search_typeproduct(e) {
+            if (!this.find_typeproduct) {
+                this.data_typeproduct = this.data_typeproduct_copy;
+                return;
+            }
+            this.data_typeproduct = this.data_typeproduct_copy.filter((item) => {
+                return item.ITEMTYPENAME.toLowerCase().indexOf(this.find_typeproduct.toLowerCase()) > -1;
+            });
+        },
+        toggleSelectAllTypeproduct() {
+            if (this.isAllTypeproductSelected) {
+                this.selected_typeproduct = [];
+            } else {
+                this.selected_typeproduct = this.data_typeproduct.map(i => i.ITEMTYPECODE);
+            }
+        },
+    },
+    computed: {
+        isAllTypeproductSelected() {
+            return (
+                this.selected_typeproduct.length > 0 &&
+                this.selected_typeproduct.length === this.data_typeproduct.length
+            );
+        },
+    },
+    watch: {
+        search_productmain(val) {
+            if (!val) {
+                this.product_main = this.product_main_copy;
+                return;
+            }
+            this.product_main = this.product_main_copy.filter(product =>
+                product.CODE.toLowerCase().includes(val.toLowerCase())
+            );
+        }
+    },
+    mounted() {
+        $(".loading-page").hide()
+        
+    },
+})
+</script>
