@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gogo! ✈️</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #0ea5e9;
+    --ocean: #0369a1;
+    --sand: #fef3c7;
+    --coral: #f97316;
+    --leaf: #10b981;
+    --bg: #f0f9ff;
+    --card: #ffffff;
+    --text: #0c4a6e;
+    --muted: #7dd3fc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated sky background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(160deg, #bae6fd 0%, #e0f2fe 40%, #f0f9ff 70%, #fef9c3 100%);
+    z-index: -2;
+  }
+
+  /* Floating clouds */
+  .cloud {
+    position: fixed;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.6;
+    z-index: -1;
+    animation: drift linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  .cloud-1 { width: 120px; height: 40px; top: 10%; left: -150px; animation-duration: 25s; }
+  .cloud-1::before { width: 60px; height: 60px; top: -30px; left: 20px; }
+  .cloud-1::after { width: 40px; height: 40px; top: -20px; left: 60px; }
+  .cloud-2 { width: 80px; height: 28px; top: 25%; left: -110px; animation-duration: 35s; animation-delay: -10s; opacity: 0.4; }
+  .cloud-2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
+  .cloud-3 { width: 150px; height: 50px; top: 5%; left: -180px; animation-duration: 45s; animation-delay: -20s; opacity: 0.3; }
+  .cloud-3::before { width: 70px; height: 70px; top: -35px; left: 25px; }
+
+  @keyframes drift { to { transform: translateX(110vw); } }
+
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeDown 0.6s ease;
+  }
+
+  .plane-icon {
+    font-size: 3.5rem;
+    display: inline-block;
+    animation: flyIn 1s ease forwards, sway 3s ease-in-out 1s infinite;
+    margin-bottom: 0.5rem;
+  }
+
+  @keyframes flyIn {
+    from { transform: translateX(-60px) rotate(-15deg); opacity: 0; }
+    to { transform: translateX(0) rotate(0deg); opacity: 1; }
+  }
+  @keyframes sway {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+  }
+
+  h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  h1 span { color: var(--sky); }
+
+  .subtitle {
+    color: var(--ocean);
+    font-size: 1rem;
+    margin-top: 0.4rem;
+    opacity: 0.8;
+  }
+
+  /* Trip Info Card */
+  .trip-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(14,165,233,0.12);
+    border: 2px solid #e0f2fe;
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
+
+  .trip-card h2 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .trip-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .trip-fields .full { grid-column: 1 / -1; }
+
+  .field-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ocean);
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .field-group input, .field-group select {
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    border: 2px solid #bae6fd;
+    border-radius: 10px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .field-group input:focus, .field-group select:focus {
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+  }
+
+  /* Sign-up Form */
+  .form-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(14,165,233,0.12);
+    border: 2px solid #e0f2fe;
+    animation: fadeUp 0.5s ease 0.35s both;
+  }
+
+  .form-card h2 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  .input-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ocean);
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 2px solid #bae6fd;
+    border-radius: 10px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .input-group input:focus, .input-group select:focus {
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, var(--sky), var(--ocean));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 15px rgba(14,165,233,0.35);
+    letter-spacing: 0.03em;
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(14,165,233,0.45);
+  }
+
+  .btn-submit:active { transform: translateY(0); }
+
+  .btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 15px rgba(14,165,233,0.2);
+  }
+
+  /* Member List */
+  .list-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(14,165,233,0.12);
+    border: 2px solid #e0f2fe;
+    animation: fadeUp 0.5s ease 0.5s both;
+  }
+
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .list-header h2 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .count-badge {
+    background: linear-gradient(135deg, var(--sky), var(--ocean));
+    color: white;
+    border-radius: 20px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .list-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-export {
+    background: var(--leaf);
+    color: white;
+  }
+
+  .btn-clear {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  .btn-sm:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* Search */
+  .search-box {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 0.6rem 0.9rem 0.6rem 2.3rem;
+    border: 2px solid #bae6fd;
+    border-radius: 10px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    color: var(--text);
+    background: var(--bg);
+  }
+  .search-box input:focus { border-color: var(--sky); }
+  .search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+  }
+
+  /* Member items */
+  .member-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .member-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    background: var(--bg);
+    border: 1px solid #e0f2fe;
+    animation: popIn 0.3s ease;
+    transition: transform 0.15s;
+  }
+
+  .member-item:hover { transform: translateX(4px); }
+
+  @keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .member-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sky), var(--ocean));
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .member-info { flex: 1; min-width: 0; }
+
+  .member-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .member-meta {
+    font-size: 0.78rem;
+    color: var(--ocean);
+    opacity: 0.8;
+  }
+
+  .member-tag {
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #dcfce7;
+    color: #15803d;
+    flex-shrink: 0;
+  }
+
+  .member-tag.room { background: #fef3c7; color: #b45309; }
+
+  .btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0.4;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-delete:hover { opacity: 1; }
+
+  .empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--muted);
+  }
+  .empty-state .emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+  .empty-state p { font-size: 0.9rem; }
+
+  .loading-state {
+    text-align: center;
+    padding: 1.6rem 1rem;
+    color: var(--ocean);
+    font-weight: 600;
+  }
+
+  .loading-spinner {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #bae6fd;
+    border-top-color: var(--sky);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 0.6rem;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--text);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 30px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    z-index: 100;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { background: var(--leaf); }
+  .toast.error { background: #ef4444; }
+
+  @keyframes fadeDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @media (max-width: 500px) {
+    h1 { font-size: 1.7rem; }
+    .form-row, .trip-fields { grid-template-columns: 1fr; }
+    .form-row.triple { grid-template-columns: 1fr 1fr; }
+  }
+
+  .text-tripname {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--coral);
+    margin-top: 0.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+
+<div class="wrapper">
+  <header>
+    <div class="plane-icon">✈️</div>
+    <h1>ลงชื่อ<span>ไปเที่ยว</span></h1>
+    <p class="subtitle">บันทึกรายชื่อผู้ร่วมเดินทาง</p>
+  </header>
+
+  <!-- Trip Info -->
+  <div class="trip-card">
+    <h2>🗺️ ข้อมูลการเดินทาง</h2>
+    <div class="trip-fields">
+      <div class="field-group full">
+        <label>ชื่อทริป / สถานที่</label>
+        <h1 class="text-tripname">นครนายก Holiday</h1>
+      </div>
+      <div class="field-group">
+        <label>วันที่ออกเดินทาง</label>
+        <input type="date" id="tripDate" style="display: none;" />-
+      </div>
+      <div class="field-group">
+        <label>วันที่กลับ</label>
+        <input type="date" id="tripDateEnd" style="display: none;" />-
+      </div>
+    </div>
+  </div>
+  <!-- <div class="trip-card">
+    <h2>🗺️ ข้อมูลการเดินทาง</h2>
+    <div class="trip-fields">
+      <div class="field-group full">
+        <label>ชื่อทริป / สถานที่</label>
+        <input type="text" id="tripName" placeholder="เช่น ทริปเชียงใหม่ ปีใหม่ 2568" value="นครนายก Holiday" disabled/>
+      </div>
+      <div class="field-group">
+        <label>วันที่ออกเดินทาง</label>
+        <input type="date" id="tripDate" />
+      </div>
+      <div class="field-group">
+        <label>วันที่กลับ</label>
+        <input type="date" id="tripDateEnd" />
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Sign-up Form -->
+  <div class="form-card">
+    <h2>📝 ลงชื่อเข้าร่วม</h2>
+    <div class="form-row">
+      <div class="input-group">
+        <label>ชื่อ-นามสกุล *</label>
+        <input type="text" id="name" placeholder="กรอกชื่อ-นามสกุล" />
+      </div>
+      <div class="input-group">
+        <label>ชื่อเล่น</label>
+        <input type="text" id="nickname" placeholder="ชื่อเล่น" />
+      </div>
+    </div>
+    <div class="form-row triple">
+      <div class="input-group">
+        <label>เบอร์โทร</label>
+        <input type="tel" id="phone" placeholder="08X-XXX-XXXX" />
+      </div>
+      <div class="input-group">
+        <label>ประเภท</label>
+        <select id="type">
+          <option value="ผู้ใหญ่">ผู้ใหญ่</option>
+          <option value="เด็ก">เด็ก</option>
+          <option value="ผู้สูงอายุ">ผู้สูงอายุ</option>
+        </select>
+      </div>
+      <!-- <div class="input-group">
+        <label>ห้องพัก</label>
+        <input type="text" id="room" placeholder="เช่น ห้อง 101" />
+      </div> -->
+    </div>
+    <button class="btn-submit" id="submitBtn" onclick="addMember()">+ เพิ่มรายชื่อ</button>
+  </div>
+
+  <!-- Member List -->
+  <div class="list-card">
+    <div class="list-header">
+      <h2>👥 รายชื่อผู้ร่วมเดินทาง <span class="count-badge" id="countBadge">0 คน</span></h2>
+      <div class="list-actions">
+        <!-- <button class="btn-sm btn-export" onclick="exportCSV()">📥 ส่งออก CSV</button> -->
+        <!-- ปิดการใช้งานชั่วคราว: backend ยังไม่มี endpoint ลบทั้งหมด -->
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="ค้นหาชื่อ..." oninput="renderList()" />
+    </div>
+    <div class="member-list" id="memberList">
+      <div class="empty-state">
+        <span class="emoji">🏝️</span>
+        <p>ยังไม่มีรายชื่อ<br>เริ่มลงชื่อด้านบนได้เลย!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_BASE = 'https://develop-api-production.up.railway.app/api';
+let members = [];
+const loadingState = { create: false, read: false };
+
+function setLoading(type, isLoading) {
+  loadingState[type] = isLoading;
+
+  const submitBtn = document.getElementById('submitBtn');
+  const searchInput = document.getElementById('searchInput');
+  const isBusy = loadingState.create || loadingState.read;
+
+  if (submitBtn) {
+    submitBtn.disabled = isBusy;
+    submitBtn.textContent = loadingState.create ? 'กำลังบันทึก...' : '+ เพิ่มรายชื่อ';
+  }
+
+  if (searchInput) {
+    searchInput.disabled = loadingState.read;
+  }
+}
+
+function normalizeMember(member, index) {
+  const fallbackId = `${member.created_at || 'member'}-${index}`;
+  return {
+    id: member.id || fallbackId,
+    full_name: member.full_name || member.name || '',
+    nickname: member.nickname || '',
+    tel: member.tel || member.phone || '',
+    gender_type: member.gender_type || member.type || 'ผู้ใหญ่',
+    created_at: member.created_at || null
+  };
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+async function addMember() {
+  const name = document.getElementById('name').value.trim();
+  if (!name) { showToast('กรุณากรอกชื่อ-นามสกุล', 'error'); return; }
+
+  try {
+    setLoading('create', true);
+
+    const payload = {
+      full_name: name,
+      nickname: document.getElementById('nickname').value.trim(),
+      tel: document.getElementById('phone').value.trim(),
+      gender_type: document.getElementById('type').value
+    };
+
+    const response = await fetch(`${API_BASE}/add-registrations-travel`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    if (!response.ok || result.error) {
+      throw new Error(result.error?.message || 'ไม่สามารถบันทึกข้อมูลได้');
+    }
+
+    showToast(`✅ เพิ่ม "${name}" เรียบร้อย`);
+    ['name', 'nickname', 'phone'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('name').focus();
+    await fetchTravelData();
+  } catch (error) {
+    console.error('Error saving data:', error);
+    showToast('❌ ไม่สามารถบันทึกข้อมูลได้', 'error');
+  } finally {
+    setLoading('create', false);
+  }
+}
+
+function deleteMember(id) {
+  showToast('ฟีเจอร์ลบยังไม่รองรับในระบบนี้', 'error');
+}
+
+function clearAll() {
+  showToast('ฟีเจอร์ล้างทั้งหมดยังไม่รองรับในระบบนี้', 'error');
+}
+
+function renderList() {
+  const list = document.getElementById('memberList');
+  if (loadingState.read && !members.length) {
+    list.innerHTML = `<div class="loading-state"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</div>`;
+    return;
+  }
+
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const displayMembers = members;
+  const filtered = displayMembers.filter(m => {
+    const name = m.name || m.full_name || '';
+    const nickname = m.nickname || '';
+    return name.toLowerCase().includes(q) || nickname.toLowerCase().includes(q);
+  });
+
+  document.getElementById('countBadge').textContent = `${displayMembers.length} คน`;
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><span class="emoji">${q ? '🔍' : '🏝️'}</span><p>${q ? 'ไม่พบชื่อที่ค้นหา' : 'ยังไม่มีรายชื่อ<br>เริ่มลงชื่อด้านบนได้เลย!'}</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map((m, i) => `
+    <div class="member-item">
+      <div class="member-num">${i + 1}</div>
+      <div class="member-info">
+        <div class="member-name">${m.full_name || m.name}${m.nickname ? ` (${m.nickname})` : ''}</div>
+        <div class="member-meta">${m.tel || m.phone ? '📞 ' + (m.tel || m.phone) + ' ' : ''}</div>
+      </div>
+      ${m.room ? `<span class="member-tag room">🛏️ ${m.room}</span>` : ''}
+      <span class="member-tag">${m.gender_type || m.type}</span>
+    </div>
+  `).join('');
+}
+
+function exportCSV() {
+  if (!members.length) { showToast('ไม่มีข้อมูลให้ส่งออก', 'error'); return; }
+
+  const tripName = document.getElementById('tripName').value || 'ทริปไปเที่ยว';
+  const header = 'ลำดับ,ชื่อ-นามสกุล,ชื่อเล่น,เบอร์โทร,ประเภท,ห้องพัก,เวลาลงชื่อ';
+  const rows = members.map((m, i) =>
+    `${i+1},"${m.name}","${m.nickname}","${m.phone}","${m.type}","${m.room}","${m.time}"`
+  );
+
+  const csv = '\uFEFF' + header + '\n' + rows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `รายชื่อ_${tripName}.csv`;
+  a.click();
+  showToast('📥 ส่งออกไฟล์ CSV แล้ว');
+}
+
+// Allow Enter to submit
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.closest('.form-card')) addMember();
+});
+
+async function fetchTravelData() {
+  setLoading('read', true);
+  renderList();
+
+  try {
+    const response = await fetch(`${API_BASE}/get-registrations-travel`);
+    const result = await response.json();
+
+    if (!response.ok || result.error) {
+      throw new Error(result.error?.message || 'ไม่สามารถโหลดข้อมูลได้');
+    }
+
+    members = Array.isArray(result.data)
+      ? result.data.map((member, index) => normalizeMember(member, index))
+      : [];
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    members = [];
+    showToast('❌ ไม่สามารถโหลดข้อมูลได้', 'error');
+  } finally {
+    setLoading('read', false);
+    renderList();
+  }
+}
+
+// Init
+fetchTravelData();
+
+</script>
+</body>
+</html>
